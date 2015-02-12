@@ -1,24 +1,24 @@
 
 %token <char> CHAR
+%token <string> FUNC STR
+
+%token EOL
 %token EOF
+
 
 %start main
 %type <unit> main
 %%
 
 main:
-   characters EOF {print_newline ()}
+   line EOF {}
 ;
 
-/*
- * A list of characters can be empty or composed of a list of characters
- * followed by a single character.
- *
- * This rule is left recursive because:
- *  - it is more efficient;
- *  - otherwise, the character input would be reversed. 
- */
-characters:
-    /* empty */ {}
-  | characters CHAR {print_char $2}
+line:
+	/* empty */ {}
+	| function EOL {print_newline ()}
+;
+
+function:
+	| FUNC STR {print_string $1}
 ;
