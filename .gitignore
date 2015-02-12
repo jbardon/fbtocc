@@ -1,0 +1,6 @@
+*.cm[iox]
+*.mli
+*.opt
+scanner.ml
+parser.ml
+fbtocc
