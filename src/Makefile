@@ -1,4 +1,4 @@
-EXEC = fbtoc
+EXEC = fbtocc
 
 CAMLC = ocamlc
 CAMLDEP = ocamldep

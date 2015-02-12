@@ -5,9 +5,18 @@
 
 | _ as c {failwith ("unknown character: " ^ (String.make 1 c))}
 
-(**
-line:
-     {}
-  | line FUNC STR EOL {print_string $3; print_newline ()}
+
+
+
+main:
+   line EOF {}
 ;
-**)
+
+line:
+	/* empty */ {}
+	| line function EOL {print_newline ()}
+;
+
+function:
+	| FUNC STR {print_string $1}
+;

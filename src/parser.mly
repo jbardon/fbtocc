@@ -1,3 +1,11 @@
+%{
+	let file = open_out "output.c"
+
+	let write line =
+		output_string file line; 
+		output_string file "\n";
+  	;;  
+%}
 
 %token <char> CHAR
 %token <string> FUNC STR
@@ -11,14 +19,15 @@
 %%
 
 main:
-   line EOF {}
+   lines EOF {}
+;
+
+lines:
+	/* empty */ {}
+	| lines line EOL {}
 ;
 
 line:
-	/* empty */ {}
-	| function EOL {print_newline ()}
-;
-
-function:
-	| FUNC STR {print_string $1}
+	| FUNC {write $1}
+	| FUNC STR {write $1}
 ;
