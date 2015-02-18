@@ -17,6 +17,16 @@
   		output_string file "\treturn EXIT_SUCCESS;\n";
   		output_string file "}\n";
   	;;
+
+  	let printf arg = 
+  		write "\tprintf();";
+  	;;
+
+  	let dispatch_func name args = 
+  		match name with
+  		| "Print" -> printf args
+  		| _ -> printf "nesaitpas"
+  	;;
 %}
 
 %token <char> CHAR
@@ -39,8 +49,8 @@ lines:
 ;
 
 line:
-	| FUNC {write $1}
-	| FUNC STR {write $1}
+	| FUNC { dispatch_func $1 }
+	| FUNC STR { dispatch_func $1 $2 }
 ;
 
 headers:
