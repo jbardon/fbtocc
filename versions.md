@@ -7,16 +7,11 @@
 
 
 
-
-main:
-   line EOF {}
+footer: 
+	{ write_footer }
 ;
 
-line:
-	/* empty */ {}
-	| line function EOL {print_newline ()}
-;
-
-function:
-	| FUNC STR {print_string $1}
-;
+  	let write_footer = 
+  		output_string file "\treturn EXIT_SUCCESS;\n";
+  		output_string file "}\n";
+  	;;

@@ -12,9 +12,10 @@ all:
 	$(CAMLC) -c scanner.ml
 	$(CAMLC) -c parser.ml
 	$(CAMLC) scanner.cmo parser.cmo freebasic.ml -o $(EXEC)
+	make clean
 
 clean:
 	rm -f *.cm[iox] *.mli *~ .*~ #*#
-	rm -f $(EXEC)
+	rm -f output.c #$(EXEC)# 
 	rm -f $(EXEC).opt
 	rm -rf scanner.ml parser.ml
