@@ -9,7 +9,7 @@ let eol = ['\r' '\n']
 
 rule main = parse
 	| func   as fname {FUNC fname}
-	| string as str   {STR str}
+	| string as str   {STR (String.sub str 1 ((String.length str) - 2))}
 
 	| ws  {main lexbuf}
 	| eol {EOL}

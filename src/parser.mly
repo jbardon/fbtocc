@@ -3,30 +3,30 @@
 
 	let write line =
 		output_string file line; 
+		output_string file "\n"
+  ;;  
+
+	let write_headers () =
+		output_string file "#include <stdio.h>\n";
+		output_string file "#include <stdlib.h>\n";
 		output_string file "\n";
-  	;;  
+		output_string file "int main(int argc, char** argv){\n"
+	;;
 
-  	let write_headers () =
-  		output_string file "#include <stdio.h>\n";
-  		output_string file "#include <stdlib.h>\n";
-  		output_string file "\n";
-  		output_string file "int main(int argc, char** argv){\n";
-  	;;
+	let write_footer () = 
+		output_string file "\n\treturn EXIT_SUCCESS;\n";
+		output_string file "}\n"
+	;;
 
-  	let write_footer () = 
-  		output_string file "\treturn EXIT_SUCCESS;\n";
-  		output_string file "}\n";
-  	;;
+	let printf arg = 
+		write ("\tprintf(\"" ^ arg ^ "\");")
+	;;
 
-  	let printf arg = 
-  		write "\tprintf();";
-  	;;
-
-  	let dispatch_func name args = 
-  		match name with
-  		| "Print" -> printf args
-  		| _ -> printf "nesaitpas"
-  	;;
+	let dispatch_func name args = 
+		match name with
+		| "Print" -> printf args
+		| _ -> printf ("func: " ^ name)
+	;;
 %}
 
 %token <char> CHAR
@@ -49,7 +49,7 @@ lines:
 ;
 
 line:
-	| FUNC { dispatch_func $1 }
+	| FUNC { dispatch_func $1 ""}
 	| FUNC STR { dispatch_func $1 $2 }
 ;
 
