@@ -1,0 +1,4 @@
+Dim entier As Integer
+entier = 2
+Dim chaine As String
+chaine = "sos"

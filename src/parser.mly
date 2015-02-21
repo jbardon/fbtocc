@@ -37,11 +37,25 @@
 		| "string" -> write ("char* " ^ name ^ " = \"" ^ value ^ "\";")
 		| _ -> failwith primarytype
 	;;
+
+	let var_declaration primarytype name =
+		match primarytype with
+		| "Integer" -> write ("int " ^ name ^ ";")
+		| "String" -> write ("char* " ^ name ^ ";")
+		| _ -> failwith primarytype
+	;;
+
+	let var_affectation primarytype name value =
+		match primarytype with
+		| "int" -> write (name ^ " = " ^ value ^ ";")
+		| "string" -> write (name ^ " = \"" ^ value ^ "\";")
+		| _ -> failwith primarytype	
+	;;
 %}
 
-%token EQUAL
+%token EQUAL DEFTYPE
 %token <char> CHAR
-%token <string> IDENTIFIER STR MODIFIER INTEGER
+%token <string> IDENTIFIER STR MODIFIER INTEGER VARTYPE
 
 %token EOL
 %token EOF
@@ -60,8 +74,11 @@ lines:
 ;
 
 line:
+	| {}
 	| function_call {}
+	| var_def {}	
 	| const_var_def {}
+	| var_affect {}
 ;
 
 function_call:
@@ -73,6 +90,22 @@ const_var_def:
 	| MODIFIER IDENTIFIER EQUAL INTEGER { const_declaration "int" $2 $4 }
 	| MODIFIER IDENTIFIER EQUAL STR { const_declaration "string" $2 $4 }	
 ;
+
+var_def:
+	| MODIFIER IDENTIFIER DEFTYPE VARTYPE { var_declaration $4 $2 }
+;
+
+var_affect:
+	| IDENTIFIER EQUAL INTEGER { var_affectation "int" $1 $3 }
+	| IDENTIFIER EQUAL STR { var_affectation "string" $1 $3 }
+;
+
+var_val:
+	| INTEGER { $1 }
+	| STR { $1 }
+;
+
+
 
 headers:
 	{ write_headers ()}
