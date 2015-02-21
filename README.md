@@ -5,5 +5,6 @@ Convert [Free Basic](http://www.freebasic.net) into C language using ocamlex and
 ## Build
 ```
 $ make 
-$ ./fbtocc test/hello.fba
+$ ./fbtocc ../tests/hello.fba
+$ cat output.c
 ```

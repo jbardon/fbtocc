@@ -1,10 +1,12 @@
 %{
 	let file = open_out "output.c"
 
+	(** Write in output c file **)
 	let write line =
+		output_string file "\t";
 		output_string file line; 
 		output_string file "\n"
-  ;;  
+  	;;  
 
 	let write_headers () =
 		output_string file "#include <stdio.h>\n";
@@ -18,19 +20,28 @@
 		output_string file "}\n"
 	;;
 
+	(** Convert tokens to c language **)
 	let printf arg = 
-		write ("\tprintf(\"" ^ arg ^ "\");")
+		write ("printf(\"" ^ arg ^ "\");")
 	;;
 
 	let dispatch_func name args = 
 		match name with
 		| "Print" -> printf args
-		| _ -> printf ("func: " ^ name)
+		| _ -> failwith name
+	;;
+
+	let const_declaration primarytype name value =	
+		match primarytype with
+		| "int" -> write ("const int " ^ name ^ " = " ^ value ^ ";")
+		| "string" -> write ("char* " ^ name ^ " = \"" ^ value ^ "\";")
+		| _ -> failwith primarytype
 	;;
 %}
 
+%token EQUAL
 %token <char> CHAR
-%token <string> FUNC STR
+%token <string> IDENTIFIER STR MODIFIER INTEGER
 
 %token EOL
 %token EOF
@@ -49,8 +60,18 @@ lines:
 ;
 
 line:
-	| FUNC { dispatch_func $1 ""}
-	| FUNC STR { dispatch_func $1 $2 }
+	| function_call {}
+	| const_var_def {}
+;
+
+function_call:
+	| IDENTIFIER { dispatch_func $1 "" }
+	| IDENTIFIER STR { dispatch_func $1 $2 }	
+;
+
+const_var_def:
+	| MODIFIER IDENTIFIER EQUAL INTEGER { const_declaration "int" $2 $4 }
+	| MODIFIER IDENTIFIER EQUAL STR { const_declaration "string" $2 $4 }	
 ;
 
 headers:
