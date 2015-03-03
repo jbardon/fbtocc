@@ -9,10 +9,11 @@ all:
 	$(CAMLLEX) scanner.mll
 	$(CAMLYACC) -v parser.mly
 	$(CAMLC) -c error.ml	
+	$(CAMLC) -c definitions.ml		
 	$(CAMLC) -c parser.mli
 	$(CAMLC) -c scanner.ml
 	$(CAMLC) -c parser.ml
-	$(CAMLC) error.cmo scanner.cmo parser.cmo freebasic.ml -o $(EXEC)
+	$(CAMLC) error.cmo definitions.cmo scanner.cmo parser.cmo freebasic.ml -o $(EXEC)
 	make clean
 
 clean:
