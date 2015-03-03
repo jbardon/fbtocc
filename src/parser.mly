@@ -1,7 +1,12 @@
 %{
-	let file = open_out "output.c"
+	(** Internal management **)	
+	type t_variable = 
+		| Int of string*string
+		| Str of string*string 
 
 	(** Write in output c file **)
+	let file = open_out "output.c"
+
 	let write line =
 		output_string file "\t";
 		output_string file line; 
@@ -31,11 +36,9 @@
 		| _ -> failwith name
 	;;
 
-	let const_declaration primarytype name value =	
-		match primarytype with
-		| "int" -> write ("const int " ^ name ^ " = " ^ value ^ ";")
-		| "string" -> write ("char* " ^ name ^ " = \"" ^ value ^ "\";")
-		| _ -> failwith primarytype
+	let const_declaration =	function
+		| Int(name, value) -> write ("const int " ^ name ^ " = " ^ value ^ ";")
+		| Str(name, value) -> write ("char* " ^ name ^ " = \"" ^ value ^ "\";")
 	;;
 
 	let var_declaration primarytype name =
@@ -45,14 +48,12 @@
 		| _ -> failwith primarytype
 	;;
 
-	let var_affectation primarytype name value =
-		match primarytype with
-		| "int" -> write (name ^ " = " ^ value ^ ";")
-		| "string" -> write (name ^ " = \"" ^ value ^ "\";")
-		| _ -> failwith primarytype	
+	let var_affectation = function
+		| Int(name, value) -> write (name ^ " = " ^ value ^ ";")
+		| Str(name, value) -> write (name ^ " = \"" ^ value ^ "\";")
 	;;
 
-   let parse_error s = Error.error "Parsing error" (symbol_start_pos ())	
+    let parse_error s = Error.error "Parsing error" (symbol_start_pos ())
 %}
 
 %token EQUAL DEFTYPE
@@ -89,8 +90,8 @@ function_call:
 ;
 
 const_var_def:
-	| MODIFIER IDENTIFIER EQUAL INTEGER { const_declaration "int" $2 $4 }
-	| MODIFIER IDENTIFIER EQUAL STR { const_declaration "string" $2 $4 }	
+	| MODIFIER IDENTIFIER EQUAL INTEGER { const_declaration (Int($2,$4)) }
+	| MODIFIER IDENTIFIER EQUAL STR { const_declaration (Str($2,$4)) }	
 ;
 
 var_def:
@@ -98,13 +99,8 @@ var_def:
 ;
 
 var_affect:
-	| IDENTIFIER EQUAL INTEGER { var_affectation "int" $1 $3 }
-	| IDENTIFIER EQUAL STR { var_affectation "string" $1 $3 }
-;
-
-var_val:
-	| INTEGER { $1 }
-	| STR { $1 }
+	| IDENTIFIER EQUAL INTEGER { var_affectation (Int ($1,$3)) }
+	| IDENTIFIER EQUAL STR { var_affectation (Str ($1,$3)) }
 ;
 
 headers:

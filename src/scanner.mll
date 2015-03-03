@@ -39,4 +39,4 @@ rule main = parse
 	| '\n' { incr_line lexbuf; EOL }
 	| eof { EOF }
 
-  	| _ as c { Error.error ("Unrecognized character " ^ (String.make 1 c)) lexbuf.lex_curr_p }
+  | _ as c { Error.error ("Unrecognized character " ^ (String.make 1 c)) lexbuf.lex_curr_p }

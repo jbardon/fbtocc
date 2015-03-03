@@ -8,10 +8,10 @@
 
 type t_variable = 
 | Int of string*string
-|Str of string*string
+| Str of string*string
 
 (Int ("a", "r"))
 
-print = dunction
+print = function
 |Int(a,b) ->
 ou match
