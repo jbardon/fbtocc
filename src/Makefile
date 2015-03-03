@@ -7,11 +7,12 @@ CAMLYACC = ocamlyacc
 
 all:
 	$(CAMLLEX) scanner.mll
-	$(CAMLYACC) parser.mly
+	$(CAMLYACC) -v parser.mly
+	$(CAMLC) -c error.ml	
 	$(CAMLC) -c parser.mli
 	$(CAMLC) -c scanner.ml
 	$(CAMLC) -c parser.ml
-	$(CAMLC) scanner.cmo parser.cmo freebasic.ml -o $(EXEC)
+	$(CAMLC) error.cmo scanner.cmo parser.cmo freebasic.ml -o $(EXEC)
 	make clean
 
 clean:

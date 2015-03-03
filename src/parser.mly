@@ -51,6 +51,8 @@
 		| "string" -> write (name ^ " = \"" ^ value ^ "\";")
 		| _ -> failwith primarytype	
 	;;
+
+   let parse_error s = Error.error "Parsing error" (symbol_start_pos ())	
 %}
 
 %token EQUAL DEFTYPE
@@ -70,11 +72,11 @@ main:
 
 lines:
 	/* empty */ {}
-	| lines line EOL {}
+	| lines line {}
 ;
 
 line:
-	| {}
+	| EOL {}
 	| function_call {}
 	| var_def {}	
 	| const_var_def {}
@@ -104,8 +106,6 @@ var_val:
 	| INTEGER { $1 }
 	| STR { $1 }
 ;
-
-
 
 headers:
 	{ write_headers ()}

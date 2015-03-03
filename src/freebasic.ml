@@ -7,4 +7,7 @@ let () =
     		then print_endline "This file does not exist"
     	else
   			let lexbuf = Lexing.from_channel (open_in input_file) in
-  			Parser.main Scanner.main lexbuf
+  			try
+  				Parser.main Scanner.main lexbuf
+  			with
+  			 	Error.LexingError e -> Error.print e
