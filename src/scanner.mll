@@ -3,7 +3,7 @@
   open Lexing
   open Error
 
-  let comment_buf = ""
+  let comment_buf = ref ""
 
   (** Increments the lexing buffer line number counter.*)
   let incr_line lexbuf =
@@ -36,7 +36,7 @@ rule main = parse
 	| string     as lxm { incr_bol lexbuf ((String.length lxm) - 2); STR (String.sub lxm 1 ((String.length lxm) - 2)) }
 
 	| "=" { incr_bol lexbuf 1; EQUAL }
-  | "'" { comment_buf = ""; comment lexbuf }
+  | "'" { comment_buf := ""; comment lexbuf }
 
 	| ws   { incr_bol lexbuf 1; main lexbuf }
 	| '\n' { incr_line lexbuf; EOL }
@@ -45,5 +45,6 @@ rule main = parse
   | _ as c { Error.error ("Unrecognized character " ^ (String.make 1 c)) lexbuf.lex_curr_p }
 
 and comment = parse
-  | '\n' { incr_line lexbuf; COMMENT comment_buf; main lexbuf }
-  | _  as lxm { comment_buf = (comment_buf ^ (String.make 1 lxm)); incr_bol lexbuf 1; comment lexbuf }
+  | '\n' | eof { incr_line lexbuf; COMMENT !comment_buf }
+  | _  as lxm { comment_buf := (!comment_buf ^ (String.make 1 lxm)); incr_bol lexbuf 1; comment lexbuf }
+

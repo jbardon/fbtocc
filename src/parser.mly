@@ -18,12 +18,13 @@ main:
 ;
 
 lines:
-	/* empty */ {}
-	| lines line COMMENT { write ("//" ^ $3) }
+	/* empty */  {}
+	| lines line {}	
 ;
 
 line:
 	| EOL {}
+	| COMMENT { write ("//" ^ $1) }
 	| function_call {}
 	| var_def {}	
 	| const_var_def {}
