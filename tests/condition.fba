@@ -1,0 +1,3 @@
+If toto = "toto" Then
+	Print "ok"
+End If

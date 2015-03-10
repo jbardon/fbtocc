@@ -1,6 +1,7 @@
 *.cm[iox]
 *.mli
 *.opt
+*.output
 scanner.ml
 parser.ml
 fbtocc

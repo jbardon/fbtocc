@@ -29,13 +29,19 @@ rule main = parse
 	| "Const" as lxm { incr_bol_lxm lexbuf lxm; CONSTMODIFIER }
   | "Dim"   as lxm { incr_bol_lxm lexbuf lxm; DIMMODIFIER }  
 	| "Integer" | "String"   as lxm { incr_bol_lxm lexbuf lxm; VARTYPE lxm }
-	| "As" { incr_bol lexbuf 1; DEFTYPE }
-	
+	| "As" { incr_bol lexbuf 2; DEFTYPE }
+
+  | "If"     { incr_bol lexbuf 2; IFBEGIN }
+	| "Then"   { incr_bol lexbuf 4; IFTHEN }
+  | "End If" { incr_bol lexbuf 6; IFEND }  
+
 	| identifier as lxm { incr_bol_lxm lexbuf lxm; IDENTIFIER lxm }
 	| integer    as lxm { incr_bol_lxm lexbuf lxm; INTEGER lxm }
 	| string     as lxm { incr_bol lexbuf ((String.length lxm) - 2); STR (String.sub lxm 1 ((String.length lxm) - 2)) }
 
-	| "=" { incr_bol lexbuf 1; EQUAL }
+  | "=" { incr_bol lexbuf 1; EQUAL }
+  | "<" { incr_bol lexbuf 1; GTHAN }
+	| ">" { incr_bol lexbuf 1; LTHAN }
   | "'" { comment_buf := ""; comment lexbuf }
 
 	| ws   { incr_bol lexbuf 1; main lexbuf }

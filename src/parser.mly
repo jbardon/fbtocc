@@ -2,9 +2,12 @@
 	open Definitions
 %}
 
-%token EQUAL DEFTYPE CONSTMODIFIER DIMMODIFIER
-%token <char> CHAR
-%token <string> IDENTIFIER STR INTEGER VARTYPE COMMENT
+%token CONSTMODIFIER DIMMODIFIER
+%token EQUAL GTHAN LTHAN DEFTYPE
+%token IFBEGIN IFTHEN IFEND
+
+%token <string> IDENTIFIER COMMENT
+%token <string> STR INTEGER VARTYPE
 
 %token EOL
 %token EOF
@@ -29,6 +32,7 @@ line:
 	| var_def {}	
 	| const_var_def {}
 	| var_affect {}
+	| if_state {}
 ;
 
 function_call:
@@ -48,6 +52,28 @@ var_def:
 var_affect:
 	| IDENTIFIER EQUAL INTEGER { var_affectation (Int($1,$3)) }
 	| IDENTIFIER EQUAL STR { var_affectation (Str($1,$3)) }
+;
+
+var_type:
+	| INTEGER { $1 }
+	| STR { "\"" ^ $1 ^ "\"" }
+	| IDENTIFIER { $1 }
+;
+
+comparator:
+	| EQUAL { "=" }
+	| GTHAN { ">" }
+	| GTHAN EQUAL { ">=" }
+	| LTHAN { "<" }
+	| LTHAN EQUAL { "<=" }
+;
+
+condition:
+	| var_type comparator var_type { ($1 ^ " " ^ $2 ^ " " ^ $3) }
+;
+
+if_state:
+	| IFBEGIN condition IFTHEN lines IFEND { if_statement $2 }
 ;
 
 headers:
