@@ -21,7 +21,7 @@ main:
 ;
 
 lines:
-	/* empty */  {}
+	/* empty */  { write "" }
 	| lines line {}	
 ;
 
@@ -61,7 +61,7 @@ var_type:
 ;
 
 comparator:
-	| EQUAL { "=" }
+	| EQUAL { "==" }
 	| GTHAN { ">" }
 	| GTHAN EQUAL { ">=" }
 	| LTHAN { "<" }
@@ -77,9 +77,9 @@ if_state:
 ;
 
 headers:
-	{ write_headers ()}
+	{ write_headers () }
 ;
 
 footer: 
-	{ write_footer ()}
+	{ write_footer () }
 ;

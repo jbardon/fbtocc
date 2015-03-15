@@ -1,3 +1,7 @@
 If toto = "toto" Then
 	Print "ok"
 End If
+
+If tata = 6 Then
+	Print "ok"
+End If
