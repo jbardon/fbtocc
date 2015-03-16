@@ -1,5 +1,6 @@
 %{
 	open Definitions
+	open Expression
 %}
 
 %token CONSTMODIFIER DIMMODIFIER
@@ -13,28 +14,31 @@
 %token EOF
 
 %start main
-%type <unit> main
+%type <Expression.t list> main
 %%
 
 main:
-   headers lines EOF footer {}
+   lines EOF { $1 }
 ;
 
 lines:
-	/* empty */  { write "" }
-	| lines line {}	
+	| /* empty */ { [Empty] }
+	| lines line { $1::$2 }	
 ;
 
 line:
-	| EOL {}
-	| COMMENT { write ("//" ^ $1) }
+	| EOL { Empty }
+	| COMMENT { Comment ("//" ^ $1) }
+/*	
 	| function_call {}
 	| var_def {}	
 	| const_var_def {}
 	| var_affect {}
 	| if_state {}
+*/
 ;
 
+/*
 function_call:
 	| IDENTIFIER { dispatch_func $1 "" }
 	| IDENTIFIER STR { dispatch_func $1 $2 }	
@@ -83,3 +87,4 @@ headers:
 footer: 
 	{ write_footer () }
 ;
+*/

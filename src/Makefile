@@ -8,12 +8,13 @@ CAMLYACC = ocamlyacc
 all:
 	$(CAMLLEX) scanner.mll
 	$(CAMLYACC) -v parser.mly
+	$(CAMLC) -c expression.ml		
 	$(CAMLC) -c error.ml	
 	$(CAMLC) -c definitions.ml		
 	$(CAMLC) -c parser.mli
 	$(CAMLC) -c scanner.ml
 	$(CAMLC) -c parser.ml
-	$(CAMLC) error.cmo definitions.cmo scanner.cmo parser.cmo freebasic.ml -o $(EXEC)
+	$(CAMLC) expression.cml error.cmo definitions.cmo scanner.cmo parser.cmo freebasic.ml -o $(EXEC)
 	make clean
 
 clean:
