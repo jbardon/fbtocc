@@ -1,4 +1,4 @@
-open Expression
+open Definitions
 
 let () =
 	if Array.length Sys.argv < 2
@@ -11,6 +11,6 @@ let () =
   			let lexbuf = Lexing.from_channel (open_in input_file) in
   			try
   				let f = Parser.main Scanner.main lexbuf in
-          print_tree r
+          print_evaluation f
   			with
   			 	Error.LexingError e -> Error.print e

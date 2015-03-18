@@ -1,6 +1,23 @@
 open Parsing
 open Error 
 
+let table_variable :(string,string) Hashtbl.t = Hashtbl.create 5
+
+type t =
+	| Empty
+	| Comment of string	
+	| Variable of string
+
+let print_line = function
+	| Empty -> ()
+	| Comment(c) -> print_string c
+	| Variable(v) -> print_string ("var "^v^" type "^(Hashtbl.find table_variable v))
+
+let rec print_evaluation lines = match lines with
+	| [] -> ()
+	| hd :: tl -> print_line hd;
+				  print_evaluation tl
+
 (** Internal management **)	
 type t_variable = 
 	| Int of string*string
@@ -48,7 +65,7 @@ let const_declaration =	function
 
 let var_declaration primarytype name =
 	match primarytype with
-	| "Integer" -> write ("int " ^ name ^ ";")
+	| "Integer" -> Hashtbl.add table_variable name primarytype; 
 	| "String" -> write ("char* " ^ name ^ ";")
 	| _ -> failwith primarytype
 ;;

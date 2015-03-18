@@ -1,6 +1,5 @@
 %{
 	open Definitions
-	open Expression
 %}
 
 %token CONSTMODIFIER DIMMODIFIER
@@ -14,7 +13,7 @@
 %token EOF
 
 %start main
-%type <Expression.t list> main
+%type <Definitions.t list> main
 %%
 
 main:
@@ -23,19 +22,23 @@ main:
 
 lines:
 	| /* empty */ { [Empty] }
-	| lines line { $1::$2 }	
+	| lines line { $2::$1 }	
 ;
 
 line:
 	| EOL { Empty }
 	| COMMENT { Comment ("//" ^ $1) }
-/*	
-	| function_call {}
-	| var_def {}	
+	| var_def { $1 }
+/*
+	| function_call {}	
 	| const_var_def {}
 	| var_affect {}
 	| if_state {}
 */
+;
+
+var_def:
+	| DIMMODIFIER IDENTIFIER DEFTYPE VARTYPE { var_declaration $4 $2; Variable($2) }
 ;
 
 /*
@@ -47,10 +50,6 @@ function_call:
 const_var_def:
 	| CONSTMODIFIER IDENTIFIER EQUAL INTEGER { const_declaration (Int($2,$4)) }
 	| CONSTMODIFIER IDENTIFIER EQUAL STR { const_declaration (Str($2,$4)) }	
-;
-
-var_def:
-	| DIMMODIFIER IDENTIFIER DEFTYPE VARTYPE { var_declaration $4 $2 }
 ;
 
 var_affect:
