@@ -11,6 +11,6 @@ let () =
   			let lexbuf = Lexing.from_channel (open_in input_file) in
   			try
   				let f = Parser.main Scanner.main lexbuf in
-          print_evaluation f
+          print_code f
   			with
   			 	Error.LexingError e -> Error.print e

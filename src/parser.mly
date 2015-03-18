@@ -17,7 +17,7 @@
 %%
 
 main:
-   lines EOF { $1 }
+   lines EOF { List.rev $1 }
 ;
 
 lines:
@@ -28,33 +28,29 @@ lines:
 line:
 	| EOL { Empty }
 	| COMMENT { Comment ("//" ^ $1) }
-	| var_def { $1 }
-/*
-	| function_call {}	
-	| const_var_def {}
-	| var_affect {}
-	| if_state {}
-*/
+	| const_var_def {$1}	
+	| var_def {$1}
+	| var_affect {$1}
+	| function_call {$1}	
+	| if_state {$1}
 ;
 
-var_def:
-	| DIMMODIFIER IDENTIFIER DEFTYPE VARTYPE { var_declaration $4 $2; Variable($2) }
-;
-
-/*
 function_call:
-	| IDENTIFIER { dispatch_func $1 "" }
 	| IDENTIFIER STR { dispatch_func $1 $2 }	
 ;
 
-const_var_def:
-	| CONSTMODIFIER IDENTIFIER EQUAL INTEGER { const_declaration (Int($2,$4)) }
-	| CONSTMODIFIER IDENTIFIER EQUAL STR { const_declaration (Str($2,$4)) }	
+var_def:
+	| DIMMODIFIER IDENTIFIER DEFTYPE VARTYPE { var_declaration $4 $2; VarDecl($2) }
 ;
 
 var_affect:
-	| IDENTIFIER EQUAL INTEGER { var_affectation (Int($1,$3)) }
-	| IDENTIFIER EQUAL STR { var_affectation (Str($1,$3)) }
+	| IDENTIFIER EQUAL INTEGER { VarAff($1,$3) }
+	| IDENTIFIER EQUAL STR { VarAff($1,$3) }
+;
+
+const_var_def:
+	| CONSTMODIFIER IDENTIFIER EQUAL INTEGER { ConstDecl($2,$4, "Integer") }
+	| CONSTMODIFIER IDENTIFIER EQUAL STR { ConstDecl($2,$4, "String") }	
 ;
 
 var_type:
@@ -76,14 +72,5 @@ condition:
 ;
 
 if_state:
-	| IFBEGIN condition IFTHEN lines IFEND { if_statement $2 }
+	| IFBEGIN condition IFTHEN lines IFEND { IfState($2,(List.rev $4)) }
 ;
-
-headers:
-	{ write_headers () }
-;
-
-footer: 
-	{ write_footer () }
-;
-*/

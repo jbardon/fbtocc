@@ -1,0 +1,7 @@
+' test
+Dim entier As String
+entier = "zrzer"
+
+Const toto = "ere"
+
+Print "salut zzez"
