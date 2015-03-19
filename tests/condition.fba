@@ -1,3 +1,6 @@
+Dim toto As String
+Dim tata As Integer
+
 If toto = "toto" Then
 	Print "ok"
 End If

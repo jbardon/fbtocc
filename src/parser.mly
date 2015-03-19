@@ -54,9 +54,9 @@ const_var_def:
 ;
 
 var_type:
-	| INTEGER { $1 }
-	| STR { "\"" ^ $1 ^ "\"" }
-	| IDENTIFIER { $1 }
+	| INTEGER { Int($1) }
+	| STR { String($1) }
+	| IDENTIFIER { Variable($1) }
 ;
 
 comparator:
@@ -68,7 +68,7 @@ comparator:
 ;
 
 condition:
-	| var_type comparator var_type { ($1 ^ " " ^ $2 ^ " " ^ $3) }
+	| var_type comparator var_type { build_condition $1 $2 $3 }
 ;
 
 if_state:

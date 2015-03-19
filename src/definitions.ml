@@ -22,22 +22,35 @@ let write_footer () =
 	output_string file "}\n"
 ;;
 
+type t_var =
+	| Int of string
+	| String of string
+	| Variable of string
+
 let table_variable :(string,string) Hashtbl.t = Hashtbl.create 5
 
-let print_var_affectation name value = 
+let var_to_type name = 
 	let primarytype = Hashtbl.find table_variable name in 
 	match primarytype with
-	| "Integer" -> write (name ^ " = " ^ value ^ ";") 
-	| "String" -> write (name ^ " = " ^ value ^ ";")
-	| _ -> failwith primarytype
+	| "Integer" -> Int(name)
+	| "String" -> String(name)
+	| _ -> failwith primarytype	
+;;
+
+let print_var_affectation name value = 
+	let variable = var_to_type name in 
+	match variable with
+	| Int _ -> write (name ^ " = " ^ value ^ ";") 
+	| String _ -> write (name ^ " = " ^ value ^ ";")
+	| Variable(value) -> failwith value
 ;;
 
 let print_var_declaration name = 
-	let primarytype = Hashtbl.find table_variable name in 
-	match primarytype with
-	| "Integer" -> write ("int " ^ name ^ ";") 
-	| "String" -> write ("char* " ^ name ^ ";")
-	| _ -> failwith primarytype
+	let variable = var_to_type name in 
+	match variable with
+	| Int _ -> write ("int " ^ name ^ ";") 
+	| String _ -> write ("char* " ^ name ^ ";")
+	| Variable(value) -> failwith value
 ;;
 
 let print_const_declaration name value primarytype = 
@@ -60,7 +73,27 @@ type t =
 	| FuncCall of string * string
 	| IfState of string * t list
 
-let print_line = function
+let convert_var = function
+	| Int _ | String _  as a -> a
+	| Variable(value) -> var_to_type value
+
+let build_condition a comp b = 
+
+	let ac = convert_var a in
+	let bc = convert_var b in
+
+	match (comp, ac, bc) with
+	| (comp, Int v1, Int v2)
+		-> (v1 ^ " " ^ comp ^ " " ^ v2)
+
+	| (comp, String v1, String v2)
+		-> ("strcmp(" ^ v1 ^ ", " ^ v2 ^ ") " ^ comp ^ " 0")
+
+	| (comp, _, _)
+		-> failwith comp	
+;;
+
+let rec print_line = function
 	| Empty -> ()
 	| Comment(c) -> write c
 	| ConstDecl(var, value, primarytype) -> print_const_declaration var value primarytype
@@ -69,21 +102,21 @@ let print_line = function
 	| FuncCall(name, args) -> print_func_call name args
 	| IfState(cond, lines) -> print_if_statement cond lines
 
-let rec print_evaluation lines = match lines with
+and print_if_statement cond lines = 
+	write ("if(" ^ cond ^ "){");
+	print_evaluation lines;
+	write "}"
+
+and print_evaluation lines = match lines with
 	| [] -> ()
 	| hd :: tl -> print_line hd;
 				  print_evaluation tl
+;;
 
 let print_code lines = 
 	write_headers ();
 	print_evaluation lines;
 	write_footer ()
-;;
-
-let print_if_statement cond lines = 
-	write ("if(" ^ cond ^ "){");
-	print_evaluation lines;
-	write "}"
 ;;
 
 (** Error override **)
