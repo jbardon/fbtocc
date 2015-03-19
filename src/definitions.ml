@@ -10,6 +10,10 @@ let write line =
 	output_string file "\n"
 ;;  
 
+let write_word word = 
+	output_string file word
+;;
+
 let write_headers () =
 	output_string file "#include <stdio.h>\n";
 	output_string file "#include <stdlib.h>\n";
@@ -60,8 +64,29 @@ let print_const_declaration name value primarytype =
 	| _ -> failwith primarytype
 ;;
 
+let write_args arg endv = match arg with 
+	| Int(value) -> write_word (value ^ (if endv then "" else ",")) 
+	| String(value) -> write_word (value ^ (if endv then "" else ",")) 
+	| Variable(value) -> write_word (value ^ (if endv then "" else ",")) 
+;;
+
+let rec print_args args = match args with
+	| [] -> ()
+	| hd :: tl -> if (List.length tl) = 0 then 
+					write_args hd true
+				  else write_args hd false;
+
+				  print_args tl
+;;
+
 let print_func_call name args =
-	write (name ^ "(" ^ args ^ ");")
+	write_word (name ^ "(");
+
+	if (List.length args) > 1 then
+		(**write (List.hd args)**)
+		print_args args;
+
+	write_word(");\n")
 ;;
 
 type t =
@@ -70,8 +95,8 @@ type t =
 	| ConstDecl of string * string * string
 	| VarDecl of string
 	| VarAff of string * string
-	| FuncCall of string * string
-	| IfState of string * t list
+	| FuncCall of string * t_var list
+	| IfState of string * t list * t list
 
 let convert_var = function
 	| Int _ | String _  as a -> a
@@ -100,17 +125,22 @@ let rec print_line = function
 	| VarDecl(v) -> print_var_declaration v
 	| VarAff(var, value) -> print_var_affectation var value
 	| FuncCall(name, args) -> print_func_call name args
-	| IfState(cond, lines) -> print_if_statement cond lines
-
-and print_if_statement cond lines = 
-	write ("if(" ^ cond ^ "){");
-	print_evaluation lines;
-	write "}"
+	| IfState(cond, lines0, lines1) -> print_if_statement cond lines0 lines1
 
 and print_evaluation lines = match lines with
 	| [] -> ()
 	| hd :: tl -> print_line hd;
 				  print_evaluation tl
+
+and print_if_statement cond lines0 lines1 = 
+	write ("if(" ^ cond ^ "){");
+	print_evaluation lines0;
+
+	if (List.length lines1) > 0 then 
+		write ("} else {");
+		print_evaluation lines1;
+
+	write "}"
 ;;
 
 let print_code lines = 
@@ -126,7 +156,7 @@ let parse_error s = Error.error "Parsing error" (symbol_start_pos ())
 let dispatch_func name args = 
 	match name with
 	| "Print" -> FuncCall("printf", args)
-	| _ -> failwith name
+	| _ -> FuncCall(name, args)
 ;;
 
 let var_declaration primarytype name =

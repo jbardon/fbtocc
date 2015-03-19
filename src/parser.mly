@@ -3,8 +3,8 @@
 %}
 
 %token CONSTMODIFIER DIMMODIFIER
-%token EQUAL GTHAN LTHAN DEFTYPE
-%token IFBEGIN IFTHEN IFEND
+%token EQUAL GTHAN LTHAN DEFTYPE COMMA
+%token IFBEGIN IFTHEN ELSE IFEND
 
 %token <string> IDENTIFIER COMMENT
 %token <string> STR INTEGER VARTYPE
@@ -36,7 +36,17 @@ line:
 ;
 
 function_call:
-	| IDENTIFIER STR { dispatch_func $1 $2 }	
+	| IDENTIFIER args { dispatch_func $1 $2 }	
+;
+
+args:
+	| {[]}
+	| args_list { List.rev $1 }
+;
+
+args_list:
+	| var_type {[$1]}	
+	| args_list COMMA var_type {$3::$1}
 ;
 
 var_def:
@@ -72,5 +82,6 @@ condition:
 ;
 
 if_state:
-	| IFBEGIN condition IFTHEN lines IFEND { IfState($2,(List.rev $4)) }
+	| IFBEGIN condition IFTHEN lines IFEND { IfState($2,(List.rev $4),[]) }
+	| IFBEGIN condition IFTHEN lines ELSE lines IFEND { IfState($2,(List.rev $4),(List.rev $6)) }
 ;

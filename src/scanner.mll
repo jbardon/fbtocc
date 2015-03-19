@@ -33,6 +33,7 @@ rule main = parse
 
   | "If"     { incr_bol lexbuf 2; IFBEGIN }
 	| "Then"   { incr_bol lexbuf 4; IFTHEN }
+  | "Else"   { incr_bol lexbuf 4; ELSE }  
   | "End If" { incr_bol lexbuf 6; IFEND }  
 
 	| identifier as lxm { incr_bol_lxm lexbuf lxm; IDENTIFIER lxm }
@@ -42,6 +43,7 @@ rule main = parse
   | "=" { incr_bol lexbuf 1; EQUAL }
   | "<" { incr_bol lexbuf 1; GTHAN }
 	| ">" { incr_bol lexbuf 1; LTHAN }
+  | "," { incr_bol lexbuf 1; COMMA }  
   | "'" { comment_buf := ""; comment lexbuf }
 
 	| ws   { incr_bol lexbuf 1; main lexbuf }
