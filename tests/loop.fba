@@ -1,0 +1,12 @@
+For number = 1 To 100
+	Print "toto"
+Next
+
+Dim number As Integer
+Do While number = 3
+	Print "toto"
+Loop
+
+Do 
+	sayHello 
+Loop

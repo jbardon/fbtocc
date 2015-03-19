@@ -26,16 +26,22 @@ let string = '"' [^'"']* '"'
 let ws = [' ' '\t']
 
 rule main = parse
-	| "Const" as lxm { incr_bol_lxm lexbuf lxm; CONSTMODIFIER }
-  | "Dim"   as lxm { incr_bol_lxm lexbuf lxm; DIMMODIFIER }  
+	| "Const" as lxm { incr_bol_lxm lexbuf lxm; CONST }
+  | "Dim"   as lxm { incr_bol_lxm lexbuf lxm; DIM }  
 	| "Integer" | "String"   as lxm { incr_bol_lxm lexbuf lxm; VARTYPE lxm }
-	| "As" { incr_bol lexbuf 2; DEFTYPE }
+	| "As" { incr_bol lexbuf 2; AS }
 
-  | "If"     { incr_bol lexbuf 2; IFBEGIN }
-	| "Then"   { incr_bol lexbuf 4; IFTHEN }
+  | "If"     { incr_bol lexbuf 2; IF }
+	| "Then"   { incr_bol lexbuf 4; THEN }
   | "Else"   { incr_bol lexbuf 4; ELSE }  
   | "End If" { incr_bol lexbuf 6; IFEND }  
-
+  | "For"    { incr_bol lexbuf 3; FOR } 
+  | "To"     { incr_bol lexbuf 2; TO } 
+  | "Next"   { incr_bol lexbuf 4; NEXT } 
+  | "While"  { incr_bol lexbuf 5; WHILE } 
+  | "Do"     { incr_bol lexbuf 2; DO } 
+  | "Loop"   { incr_bol lexbuf 4; LOOP } 
+      
 	| identifier as lxm { incr_bol_lxm lexbuf lxm; IDENTIFIER lxm }
 	| integer    as lxm { incr_bol_lxm lexbuf lxm; INTEGER lxm }
 	| string     as lxm { incr_bol_lxm lexbuf lxm; STR lxm }
@@ -43,7 +49,10 @@ rule main = parse
   | "=" { incr_bol lexbuf 1; EQUAL }
   | "<" { incr_bol lexbuf 1; GTHAN }
 	| ">" { incr_bol lexbuf 1; LTHAN }
-  | "," { incr_bol lexbuf 1; COMMA }  
+  | "," { incr_bol lexbuf 1; COMMA } 
+  
+  | "+" | "-" | "*" | "/" as lxm { incr_bol lexbuf 1; OPERATION (String.make 1 lxm) }
+
   | "'" { comment_buf := ""; comment lexbuf }
 
 	| ws   { incr_bol lexbuf 1; main lexbuf }

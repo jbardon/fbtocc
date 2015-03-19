@@ -2,12 +2,12 @@
 	open Definitions
 %}
 
-%token CONSTMODIFIER DIMMODIFIER
-%token EQUAL GTHAN LTHAN DEFTYPE COMMA
-%token IFBEGIN IFTHEN ELSE IFEND
+%token CONST DIM
+%token EQUAL GTHAN LTHAN AS COMMA
+%token IF THEN ELSE IFEND FOR TO NEXT WHILE DO LOOP
 
 %token <string> IDENTIFIER COMMENT
-%token <string> STR INTEGER VARTYPE
+%token <string> STR INTEGER VARTYPE OPERATION
 
 %token EOL
 %token EOF
@@ -33,6 +33,8 @@ line:
 	| var_affect {$1}
 	| function_call {$1}	
 	| if_state {$1}
+	| for_state {$1}
+	| loop {$1}
 ;
 
 function_call:
@@ -50,17 +52,22 @@ args_list:
 ;
 
 var_def:
-	| DIMMODIFIER IDENTIFIER DEFTYPE VARTYPE { var_declaration $4 $2; VarDecl($2) }
+	| DIM IDENTIFIER AS VARTYPE { var_declaration $4 $2; VarDecl($2) }
 ;
 
 var_affect:
-	| IDENTIFIER EQUAL INTEGER { VarAff($1,$3) }
-	| IDENTIFIER EQUAL STR { VarAff($1,$3) }
+	| IDENTIFIER EQUAL expr { VarAff($1,$3) }
+	| IDENTIFIER EQUAL expr { VarAff($1,$3) }
+;
+
+expr: 
+	| var_type {$1}
+	| expr OPERATION expr { Operation($1,$2,$3) }
 ;
 
 const_var_def:
-	| CONSTMODIFIER IDENTIFIER EQUAL INTEGER { ConstDecl($2,$4, "Integer") }
-	| CONSTMODIFIER IDENTIFIER EQUAL STR { ConstDecl($2,$4, "String") }	
+	| CONST IDENTIFIER EQUAL INTEGER { ConstDecl($2,$4, "Integer") }
+	| CONST IDENTIFIER EQUAL STR { ConstDecl($2,$4, "String") }	
 ;
 
 var_type:
@@ -82,6 +89,15 @@ condition:
 ;
 
 if_state:
-	| IFBEGIN condition IFTHEN lines IFEND { IfState($2,(List.rev $4),[]) }
-	| IFBEGIN condition IFTHEN lines ELSE lines IFEND { IfState($2,(List.rev $4),(List.rev $6)) }
+	| IF condition THEN lines IFEND { IfState($2,(List.rev $4),[]) }
+	| IF condition THEN lines ELSE lines IFEND { IfState($2,(List.rev $4),(List.rev $6)) }
+;
+
+for_state:
+	| FOR IDENTIFIER EQUAL INTEGER TO INTEGER lines NEXT { ForState(Variable($2),$4,$6,$7) }
+;
+
+loop:
+	| DO WHILE condition lines LOOP { LoopState($3,$4) }
+	| DO lines LOOP { LoopState("",$2) }
 ;

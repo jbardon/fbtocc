@@ -7,8 +7,6 @@ End If
 
 If tata = 6 Then
 	Print "ok"
-Else
+ElseIf tata = 7 Then
 	Print "ko"
 End If
-
-Bonjour a, b, v, v
