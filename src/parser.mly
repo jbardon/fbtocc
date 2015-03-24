@@ -66,8 +66,8 @@ expr:
 ;
 
 const_var_def:
-	| CONST IDENTIFIER EQUAL INTEGER { ConstDecl($2,$4, "Integer") }
-	| CONST IDENTIFIER EQUAL STR { ConstDecl($2,$4, "String") }	
+	| CONST IDENTIFIER EQUAL INTEGER { var_declaration "Integer" $2; ConstDecl($2,$4) }
+	| CONST IDENTIFIER EQUAL STR { var_declaration "String" $2; ConstDecl($2,$4) }	
 ;
 
 var_type:
@@ -94,7 +94,7 @@ if_state:
 ;
 
 for_state:
-	| FOR IDENTIFIER EQUAL INTEGER TO INTEGER lines NEXT { ForState(Variable($2),$4,$6,$7) }
+	| FOR IDENTIFIER EQUAL INTEGER TO INTEGER lines NEXT { ForState($2,$4,$6,$7) }
 ;
 
 loop:

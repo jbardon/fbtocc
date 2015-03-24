@@ -1,7 +1,46 @@
-' test
-Dim entier As String
-entier = "zrzer"
+' Variable definition
+Const max = 21
+Const password = "123456"
+Dim number As Integer
+number = 0
 
-Const toto = "ere"
+Dim inPass As String
+inPass = "password"
 
-Print "salut zzez"
+' Conditions
+If number = max Then
+	Print "Number is max"
+End If
+
+If inPass = "mypass" Then
+	Print "Login success"
+Else
+	Print "Login failed"
+End If
+
+If inPass = password Then
+	Print "Login success"
+Else 
+	If inPass = "admin" Then
+		Print "Login success (admin mode)"
+	End If
+End If
+
+' Loops
+Do While number < max
+	Print "Incr number"
+	number = number + 2
+Loop
+
+Do 
+	Say "Hello", "FR"
+Loop
+
+For number = 1 To 12
+	Print "ForLoop number"
+Next
+
+For newvar = 1 To 5
+	Print "ForLoop newvar"
+Next
+

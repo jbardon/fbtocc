@@ -4,7 +4,8 @@ Convert [Free Basic](http://www.freebasic.net) into C language using ocamlex and
 
 ## Build
 ```
+$ cd src
 $ make 
-$ ./fbtocc ../tests/hello.fba
+$ ./fbtocc ../tests/full.fba
 $ cat output.c
 ```
