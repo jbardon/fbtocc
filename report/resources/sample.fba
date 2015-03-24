@@ -1,0 +1,10 @@
+Dim chaine As String
+chaine = "password"
+
+For iter = 1 To 5
+	If chaine = "password" Then
+		Print "Hello master"
+	Else
+		Print "Try again"
+	End If
+Next

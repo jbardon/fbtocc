@@ -1,0 +1,15 @@
+// Forme simple (implementee)
+If inPass = password Then
+	Print "Login success"
+Else 
+	If inPass = "admin" Then
+		Print "Login success (admin mode)"
+	End If
+End If 
+
+// Raccourci de syntaxe (non implemente)
+If inPass = password Then
+	Print "Login success"
+Else If inPass = "admin" Then
+	Print "Login success (admin mode)"
+End If

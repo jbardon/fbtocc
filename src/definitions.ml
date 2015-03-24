@@ -17,7 +17,7 @@ let write_headers () =
 	output_string file "#include <stdio.h>\n";
 	output_string file "#include <stdlib.h>\n";
 	output_string file "\n";
-	output_string file "int main(int argc, char** argv){\n"
+	output_string file "int main(int argc, char** argv){\n\n"
 ;;
 
 let write_footer () = 

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="841.89px" height="595.28px" viewBox="0 0 841.89 595.28" enable-background="new 0 0 841.89 595.28" xml:space="preserve">
+<rect x="72" y="81" fill="none" stroke="#000000" stroke-miterlimit="10" width="45" height="27"/>
+<rect x="63" y="45" fill="none" width="72" height="27"/>
+<text transform="matrix(1 0 0 1 63 52.1001)"><tspan x="0" y="0" font-family="'MyriadPro-Semibold'" font-size="10">Hashtbl </tspan><tspan x="0" y="12" font-family="'MyriadPro-Semibold'" font-size="10">(string, string)</tspan></text>
+<circle cx="94.5" cy="94.5" r="4.5"/>
+<circle cx="94.5" cy="121.5" r="4.5"/>
+<rect x="162" y="72" fill="none" stroke="#000000" stroke-miterlimit="10" width="63" height="27"/>
+<rect x="162" y="81" fill="none" width="63" height="18"/>
+<text transform="matrix(1 0 0 1 177.3301 89.52)" font-family="'MyriadPro-It'" font-size="12">chaine</text>
+<rect x="162" y="99" fill="none" width="63" height="9"/>
+<text transform="matrix(1 0 0 1 184.3364 104.6797)" font-family="'MyriadPro-It'" font-size="8">string</text>
+<rect x="225" y="72" fill="none" stroke="#000000" stroke-miterlimit="10" width="63" height="27"/>
+<rect x="225" y="81" fill="none" width="63" height="18"/>
+<text transform="matrix(1 0 0 1 242.1963 89.52)" font-family="'MyriadPro-It'" font-size="12">String</text>
+<rect x="216" y="99" fill="none" width="81" height="9"/>
+<text transform="matrix(1 0 0 1 247.3364 104.6797)" font-family="'MyriadPro-It'" font-size="8">string</text>
+<g>
+	<g>
+		<polyline fill="none" stroke="#000000" stroke-miterlimit="10" points="225,140 225,144 221,144 		"/>
+		
+			<line fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="7.8571,7.8571" x1="213.143" y1="144" x2="169.929" y2="144"/>
+		<polyline fill="none" stroke="#000000" stroke-miterlimit="10" points="166,144 162,144 162,140 		"/>
+		
+			<line fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="6.3333,6.3333" x1="162" y1="133.667" x2="162" y2="124.167"/>
+		<polyline fill="none" stroke="#000000" stroke-miterlimit="10" points="162,121 162,117 166,117 		"/>
+		
+			<line fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="7.8571,7.8571" x1="173.857" y1="117" x2="217.071" y2="117"/>
+		<polyline fill="none" stroke="#000000" stroke-miterlimit="10" points="221,117 225,117 225,121 		"/>
+		
+			<line fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="6.3333,6.3333" x1="225" y1="127.333" x2="225" y2="136.833"/>
+	</g>
+</g>
+<rect x="162" y="126" fill="none" width="63" height="18"/>
+<text transform="matrix(1 0 0 1 185.6221 134.52)" font-family="'MyriadPro-It'" font-size="12">iter</text>
+<rect x="162" y="144" fill="none" width="63" height="9"/>
+<text transform="matrix(1 0 0 1 184.3364 149.6797)" font-family="'MyriadPro-It'" font-size="8">string</text>
+<g>
+	<g>
+		<polyline fill="none" stroke="#000000" stroke-miterlimit="10" points="288,140 288,144 284,144 		"/>
+		
+			<line fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="7.8571,7.8571" x1="276.143" y1="144" x2="232.929" y2="144"/>
+		<polyline fill="none" stroke="#000000" stroke-miterlimit="10" points="229,144 225,144 225,140 		"/>
+		
+			<line fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="6.3333,6.3333" x1="225" y1="133.667" x2="225" y2="124.167"/>
+		<polyline fill="none" stroke="#000000" stroke-miterlimit="10" points="225,121 225,117 229,117 		"/>
+		
+			<line fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="7.8571,7.8571" x1="236.857" y1="117" x2="280.071" y2="117"/>
+		<polyline fill="none" stroke="#000000" stroke-miterlimit="10" points="284,117 288,117 288,121 		"/>
+		
+			<line fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="6.3333,6.3333" x1="288" y1="127.333" x2="288" y2="136.833"/>
+	</g>
+</g>
+<rect x="225" y="126" fill="none" width="63" height="18"/>
+<text transform="matrix(1 0 0 1 239.5322 134.52)" font-family="'MyriadPro-It'" font-size="12">Integer</text>
+<rect x="216" y="144" fill="none" width="81" height="9"/>
+<text transform="matrix(1 0 0 1 247.3364 149.6797)" font-family="'MyriadPro-It'" font-size="8">string</text>
+<g>
+	<g>
+		<polyline fill="none" stroke="#000000" stroke-miterlimit="10" points="117,131 117,135 113,135 		"/>
+		<line fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="7.4,7.4" x1="105.6" y1="135" x2="79.7" y2="135"/>
+		<polyline fill="none" stroke="#000000" stroke-miterlimit="10" points="76,135 72,135 72,131 		"/>
+		
+			<line fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="6.3333,6.3333" x1="72" y1="124.667" x2="72" y2="115.167"/>
+		<polyline fill="none" stroke="#000000" stroke-miterlimit="10" points="72,112 72,108 76,108 		"/>
+		<line fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="7.4,7.4" x1="83.4" y1="108" x2="109.3" y2="108"/>
+		<polyline fill="none" stroke="#000000" stroke-miterlimit="10" points="113,108 117,108 117,112 		"/>
+		
+			<line fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="6.3333,6.3333" x1="117" y1="118.333" x2="117" y2="127.833"/>
+	</g>
+</g>
+<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="117" y1="90" x2="162" y2="81"/>
+<g>
+	<g>
+		<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="117" y1="126" x2="120.922" y2="126.785"/>
+		
+			<line fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="7.5782,7.5782" x1="128.354" y1="128.271" x2="154.362" y2="133.473"/>
+		<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="158.078" y1="134.215" x2="162" y2="135"/>
+	</g>
+</g>
+</svg>

@@ -1,10 +1,12 @@
 \documentclass{article}
 
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[frenchb]{babel}
 
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{lscape}
 
 \usepackage{listings}
 \lstdefinestyle{customstyle}{
@@ -31,7 +33,7 @@ en \href{http://www.freebasic.net}{Free Basic} dans le langage C.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=0.6]{schema.png}
+    \includegraphics[scale=0.6]{resources/schema.png}
     \caption{Rôle du compilateur}
 \end{figure}
 	
@@ -54,25 +56,83 @@ Une autre différence de taille est la présence -- en C -- d'une routine princi
 free basic qui propose une structure plus libre du programme.
 
 \lstset{language=c,caption=Programme C englobant}
-\lstinputlisting{wrap.c}
+\lstinputlisting{resources/wrap.c}
 
 Ce sont ces différences qui amènent à devoir proposer une structure englobante d'un 
 programme dans laquelle on va ensuite insérer le code free basic converti.
 	
 \section{Grammaire}
-\begin{itemize}
-\item Fonction à 1 argument (affichage d'un message)
-\item Déclaration de constantes (entier et chaîne de caractères)
-\item Déclaration et changement de valeur de variables (entier et chaîne de caractères)
-\item Commentaire mono-ligne
-\item Condition simple (pas de close sinon)
-\item Report du numéro de ligne et de caractère en cas d'erreur lors du parsing
-\end{itemize}
+L'organisation des fichiers sources du compilateur permet de facilement identifier quelles sont 
+les règles de grammaire ainsi que les caractères reconnus.
+En effet, le fichier \emph{scanner.mll} regroupe la partie analyse syntaxique tandis que le fichier 
+\emph{parser.mly} s'occupe de l'analyse syntaxique et donc de la grammaire.
+\\\\
+Tout les exemples utilisés lors du développement du compilateur sont disponibles dans le répertoire 
+\emph{test} -- à la racine du projet -- et il contient notamment le fichier \emph{full.fba} qui peut 
+donner un aperçu global de ce que le compilateur est capable de reconnaitre et de traduire.
+
+\subsection{Variables}
+Il existe de nombreux types de variables en free basic mais le compilateur reconnait seulement les types \emph{Integer}
+et \emph{String} qui sont les plus utilisés. 
+\\\\
+Hormis la déclaration de variables et de constantes, il est possible de faire des affectation de valeurs simples
+ou d'expressions plus complexes comme des formules de math.
+
+\subsection{Fonctions}
+Le compilateur gère de manière transparente l'appel à n'importe quelle fonction avec un ou plusieurs arguments
+qu'il soient donnés en dur ou via une variable.
+\\\\
+Cela dit, pour assurer un minimum de compatibilité avec le langage c, la fonction \emph{Print} est automatiquement
+remplacée par \emph{printf} pour des paramètres passés en dur. Il n'est donc pas possible d'afficher plusieurs 
+variables car cela aurait nécessiter de construire le pattern demandé par la fonction \emph{printf}. 
+L'implémentation de cette fonctionnalité est tout de même possible mais aurait pris plus de temps.
+
+\subsection{Commentaires}
+Afin de se concentrer sur des éléments considérés plus importants -- conditions, boucles, ... --, seul les
+commentaires mono-lignes sont reconnus. Cela permet tout de même d'insérer des commentaires sans donner 
+la souplesse des commentaires multi-lignes.
+
+\subsection{Conditions}
+L'implémentation des structures conditionnelles est fonctionnelle dans une forme simple et n'intègre pas
+l'utilisation de plusieurs clauses \emph{Else if} sous une même condition.
+\\\\
+Il reste tout à fait possible d'imbriquer une condition dans une clause \emph{else} d'un première condition,
+même si cela rend la syntaxe plus complexe ce type d'opérations reste possible.
+
+\lstset{language=c,caption=Raccourci de syntaxe pour les conditions}
+\lstinputlisting{resources/condition.fba}\footnote{Commentaires en c, LaTeX refuse l'apostrophe}
+
+Le compilateur supporte les comparateurs les plus utilisés : 	
+\\\\
+=, >, <, >= et <=
+\\\\
+Il supporte la comparaison entre 
+des variables et/ou les types \emph{Integer} et \emph{String} de manière avancée puisque dans la cas de comparaison
+entre deux chaines de caractère, celui-ci utilise la fonction générique du c \emph{strcmp} de manière automatique.
+\\\\
+Cela dit, il ne permet pas de comparer le résultat d'une fonction ou encore une expression avec une autre et il 
+ne déduit pas que l'absence de comparateur est similaire à \emph{== 0}.
+\subsection{Boucles}
+L'ensemble des boucles -- pour et tant que -- sont implémentés et le compilateur donne un peu plus 
+de souplesse lors de leur utilisation.
+\\\\
+En effet, il est possible en free basic de définir une boucle infinie -- qui n'a pas de condition -- et 
+l'équivalent en c est de donner la condition \emph{true}. Ce type de boucle est tout à fait reconnu par le 
+compilateur qui converti automatique une boucle infinie en une boucle avec la condition \emph{true} en c.
+\\\\
+Dans certaines version du c, il est impossible de définir une variable directement dans la clause \emph{for}.
+C'est pourquoi le compilateur va se charger de créer de manière automatique la variable utilisée dans 
+la construction de la boucle si elle n'a pas été déclarée auparavant.
+
+\subsection{Erreurs}
+Le compilateur est capable de founir le numéro de ligne et de caractère auquel il s'est arrêté si la phase
+d'analyse lexicale à échoué. De plus, l'utilisation de variables non déclarés renvoie une erreur qui spécifie
+quelle est cette variable qui a été utilisé alors qu'elle n'existe pas.
 	
 \section{Reconnaissance des erreurs}
-Dans sa première version -- qui est l'actuelle version --, le compilateur ne gère pas 
-les erreurs de logique dans le code en free basic mais seulement les défauts d'ordre
-syntaxiques.
+Dans sa première version -- qui est l'actuelle version --, le compilateur ne gère que un type 
+d'erreur de logique -- utilisation d'une variable non déclarée -- dans le code 
+en free basic mais seulement les défauts d'ordre syntaxiques.
 \\\\
 On fait donc l'hypothèse que le code en entrée est compilable et exécutable sans erreurs
 ce qui permet de se concentrer d'avantage sur la reconnaissance -- et la conversion -- 
@@ -80,7 +140,7 @@ de nombreux éléments du langage.
 \\\\
 L'architecture interne du compilateur -- décrite plus bas -- a été pensée pour permettre
 l'intégration de cette fonctionnalité. En effet, tout les éléments sont stockés sous forme
-d'un arbre syntaxique et les variables sont sauvegardées dans un registre.	
+d'un arbre syntaxique et les variables sont sauvegardées dans un registre.
 	
 \section{Fonctionnement interne}
 Au delà de l'analyse lexicale plutôt générique, la partie intéressante se situe au niveau
@@ -102,5 +162,59 @@ entres des entiers ou entre des chaines de caractères.
 Une fois l'arbre construit et le registre rempli, un algorithme parcours l'arbre et 
 s'occupe de transformer chaque élément sous forme de chaîne de caractère correspondant
 à un code C valide.
+
+\section{Exemple concret}
+\subsection{Présentation et code free basic}
+Pour illustrer de manière plus explicite les fonctionnement du compilateur, prenons un 
+exemple de code en free basic que l'on veux convertir en C.
+
+\lstset{language=c,caption=Exemple en free basic}
+\lstinputlisting{resources/sample.fba}
+
+Cet exemple ne montre pas toutes les fonctionnalités que le compilateur possède ni 
+l'intégralité des syntaxes reconnus mais essaye d'en montrer une partie.
+\\\\
+Ce programme demande un mot de passe et donne 5 essais pour y réussir. On a donc une 
+variable -- qui contient l'entrée utilisateur -- puis une boucle -- dont la variable 
+n'est pas déclarée -- dans laquelle un message différent est affiché selon une condition.
+
+\subsection{Structures générée par le compilateur}
+\subsubsection*{Arbre syntaxique}
+\begin{landscape}
+	\begin{figure}[h]
+    		\centering
+    		\includegraphics[scale=0.65]{resources/exemple_arbre.png}
+    		\caption{Arbre syntaxique de l'exemple}
+	\end{figure}
+\end{landscape}
+
+\subsubsection*{Registre des variables}
+La variable utilisée dans la boucle n'apparait pas dans le registre car elle est ajoutée
+au moment où l'on traduit l'instruction en C. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.6]{resources/registre.png}
+    \caption{Registre des variables}
+\end{figure}
+
+A partir du moment où cette étape est passée, 
+la variable \emph{iter} est dans le registre pour permettre à la suite du programme de la
+reconnaitre.
+
+\subsection{Code généré}
+Le code C généré par le compilateur se trouve dans le fichier \emph{output.c} et il est 
+possible de le compiler -- et de l'exécuter -- sans problème avec un compilateur c.
+
+\lstset{language=c,caption=Code c de l'exemple}
+\lstinputlisting{resources/sample.c}
+
+On peut remarquer que le tout est indenté correctement mais il s'agit d'un traitement à la main 
+pour que se soit plus lisible dans le rapport. 
+\\\\
+En effet, le compilateur ne gère pas du tout 
+l'indentation du code car cela est aspect moins important que la traduction du code. De plus,
+lors de l'utilisation d'outils de conversion -- comme se compilateur --, l'utilisateur ne 
+s'intéresse que très rarement au code généré.
 
 \end{document}
