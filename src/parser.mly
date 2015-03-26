@@ -13,11 +13,11 @@
 %token EOF
 
 %start main
-%type <Definitions.t list> main
+%type <Definitions.ast> main
 %%
 
 main:
-   lines EOF { List.rev $1 }
+   lines EOF { Ast(List.rev $1) }
 ;
 
 lines:

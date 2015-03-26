@@ -49,13 +49,8 @@ let get_var name =
 		Not_found -> failwith ("Variable " ^ name ^ " not found in register")
 ;;
 
-let get_var_notsafe name = 
-	let primarytype = Hashtbl.find table_variable name in 
-	match primarytype with
-	| "Integer" -> Int(name)
-	| "String" -> String(name)
-	| _ -> failwith primarytype	
-;;
+let ask_var_exists name = Hashtbl.mem table_variable name
+
 
 let get_var_val = function
 	| Int(value) | String(value) | Variable(value) -> value
@@ -119,16 +114,19 @@ let print_func_call name args =
 	write_word(");\n")
 ;;
 
-type t =
+type ast_branch =
 	| Empty
 	| Comment of string	
 	| ConstDecl of string * string
 	| VarDecl of string
 	| VarAff of string * t_var
 	| FuncCall of string * t_var list
-	| IfState of string * t list * t list
-	| ForState of string * string * string * t list
-	| LoopState of string * t list
+	| IfState of string * ast_branch list * ast_branch list
+	| ForState of string * string * string * ast_branch list
+	| LoopState of string * ast_branch list
+
+type ast = 
+	| Ast of ast_branch list
 
 let build_condition a comp b = 
 
@@ -174,16 +172,15 @@ and print_if_statement cond lines0 lines1 =
 
 and print_for_statement variable min max lines =
 
-	try
-		let aa = get_var_notsafe variable in
-		print_string ""
-	with Not_found ->
+	if not (ask_var_exists variable) then
+	begin
 		var_declaration	"Integer" variable;
-		print_var_declaration variable; 
-
+		print_var_declaration variable
+	end;
+	
 	write_word "for (";
-	write_word (variable ^ " = " ^ min ^"; ");
-	write_word (variable ^ " < " ^ max ^"; ");
+	write_word (variable ^ " = " ^ min ^ "; ");
+	write_word (variable ^ " < " ^ max ^ "; ");
 	write_word (variable ^ "++) {\n");
 
 	print_evaluation lines;
@@ -202,9 +199,12 @@ and print_loop_statement cond lines =
 	write "}"
 ;;
 
-let print_code lines = 
+let print_code ast = 
 	write_headers ();
-	print_evaluation lines;
+
+	match ast with
+	| Ast(lines) -> print_evaluation lines;
+
 	write_footer ()
 ;;
 

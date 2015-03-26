@@ -6,7 +6,7 @@
 
 \usepackage{hyperref}
 \usepackage{graphicx}
-\usepackage{lscape}
+\usepackage{pdflscape}
 
 \usepackage{listings}
 \lstdefinestyle{customstyle}{
@@ -14,7 +14,9 @@
     breakatwhitespace=false,         
     breaklines=true,                 
     captionpos=b,                    
-    keepspaces=true,                                                                                       
+    keepspaces=true,
+	showspaces=false,   
+	showstringspaces=false,	                                                                                        
     tabsize=4,
     frame=single, %lines
     moredelim=[is][\underbar]{_}{_} % underlines permitted without escape character
@@ -25,8 +27,13 @@
 \author{Jérémy Bardon}
 
 \begin{document}
-	\maketitle
+\maketitle
 
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents	
+	
+\newpage
+	
 \section{Introduction}
 Le but de ce projet est de créer un compilateur capable de convertir un code écrit 
 en \href{http://www.freebasic.net}{Free Basic} dans le langage C. 
@@ -99,7 +106,7 @@ l'utilisation de plusieurs clauses \emph{Else if} sous une même condition.
 Il reste tout à fait possible d'imbriquer une condition dans une clause \emph{else} d'un première condition,
 même si cela rend la syntaxe plus complexe ce type d'opérations reste possible.
 
-\lstset{language=c,caption=Raccourci de syntaxe pour les conditions}
+\lstset{language=c,caption=Raccourci de syntaxe pour les conditions, upquote=true}
 \lstinputlisting{resources/condition.fba}\footnote{Commentaires en c, LaTeX refuse l'apostrophe}
 
 Le compilateur supporte les comparateurs les plus utilisés : 	
