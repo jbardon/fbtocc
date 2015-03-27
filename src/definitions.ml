@@ -30,7 +30,7 @@ type t_var =
 	| Int of string
 	| String of string
 	| Variable of string
-	| Operation of t_var * string * t_var	
+	| Operation of t_var * string * t_var
 
 let table_variable :(string,string) Hashtbl.t = Hashtbl.create 5
 
@@ -190,7 +190,7 @@ and print_loop_statement cond lines =
 	write_word "while(";
 
 	if cond = "" then
-		write_word "true"
+		write_word "1"
 	else 
 		write_word cond;
 
