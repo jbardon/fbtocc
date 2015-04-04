@@ -131,16 +131,13 @@ compilateur qui converti automatiquement une boucle infinie en une boucle avec l
 Dans certaines versions du C, il est impossible de définir une variable directement dans la clause \emph{for}.
 C'est pourquoi le compilateur va se charger de créer de manière automatique la variable utilisée dans 
 la construction de la boucle si elle n'a pas été déclarée auparavant.
-
-\subsection{Erreurs}
-Le compilateur est capable de founir le numéro de ligne et de caractère auquel il s'est arrêté si la phase
-d'analyse lexicale à échoué. De plus, l'utilisation de variables non déclarés renvoie une erreur qui spécifie
-quelle est cette variable qui a été utilisé alors qu'elle n'existe pas.
 	
 \section{Reconnaissance des erreurs}
 Dans sa première version -- qui est l'actuelle version --, le compilateur ne gère que un type 
 d'erreur de logique -- utilisation d'une variable non déclarée -- dans le code 
-en free basic en plus de détecter les défauts d'ordre syntaxiques.
+en free basic en plus de détecter les défauts d'ordre syntaxiques. Il est donc capable 
+de fournir le numéro de ligne et de caractère auquel il s'est arrêté si la phase
+d'analyse lexicale à échoué.
 \\\\
 On fait donc l'hypothèse que le code en entrée est compilable et exécutable sans erreurs
 ce qui permet de se concentrer d'avantage sur la reconnaissance -- et la conversion -- 

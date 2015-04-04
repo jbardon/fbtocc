@@ -1,6 +1,9 @@
 open Parsing
 open Error 
 
+(** Error override **)
+let parse_error s = Error.error "Parsing error" (symbol_start_pos ())
+
 (** Write in output c file **)
 let file = open_out "output.c"
 
@@ -25,7 +28,7 @@ let write_footer () =
 	output_string file "}\n"
 ;;
 
-(** Variables register **)
+(** Variables management **)
 type t_var =
 	| Int of string
 	| String of string
@@ -51,7 +54,6 @@ let get_var name =
 
 let ask_var_exists name = Hashtbl.mem table_variable name
 
-
 let get_var_val = function
 	| Int(value) | String(value) | Variable(value) -> value
 	| _ -> failwith "not a value"
@@ -62,7 +64,38 @@ let convert_var = function
 	| Variable(value) -> get_var value
 	| _ -> failwith "convert_var"
 
-(** Print operations **)
+(** Abstract syntax tree of the program **)
+type ast_branch =
+	| Empty
+	| Comment of string	
+	| ConstDecl of string * string
+	| VarDecl of string
+	| VarAff of string * t_var
+	| FuncCall of string * t_var list
+	| IfState of string * ast_branch list * ast_branch list
+	| ForState of string * string * string * ast_branch list
+	| LoopState of string * ast_branch list
+
+type ast = 
+	| Ast of ast_branch list
+
+let build_condition a comp b = 
+
+	let ac = convert_var a in
+	let bc = convert_var b in
+
+	match (comp, ac, bc) with
+	| (comp, Int v1, Int v2)
+		-> (v1 ^ " " ^ comp ^ " " ^ v2)
+
+	| (comp, String v1, String v2)
+		-> ("strcmp(" ^ v1 ^ ", " ^ v2 ^ ") " ^ comp ^ " 0")
+
+	| (comp, _, _)
+		-> failwith comp	
+;;
+
+(** Print operations (tranlation) **)
 let rec print_operation = function
 	| Int(value) | String(value) | Variable(value) -> write_word (value) 
 	| Operation(val1, op, val2) -> print_operation val1;
@@ -112,36 +145,6 @@ let print_func_call name args =
 	write_word (name ^ "(");
 	print_args args;
 	write_word(");\n")
-;;
-
-type ast_branch =
-	| Empty
-	| Comment of string	
-	| ConstDecl of string * string
-	| VarDecl of string
-	| VarAff of string * t_var
-	| FuncCall of string * t_var list
-	| IfState of string * ast_branch list * ast_branch list
-	| ForState of string * string * string * ast_branch list
-	| LoopState of string * ast_branch list
-
-type ast = 
-	| Ast of ast_branch list
-
-let build_condition a comp b = 
-
-	let ac = convert_var a in
-	let bc = convert_var b in
-
-	match (comp, ac, bc) with
-	| (comp, Int v1, Int v2)
-		-> (v1 ^ " " ^ comp ^ " " ^ v2)
-
-	| (comp, String v1, String v2)
-		-> ("strcmp(" ^ v1 ^ ", " ^ v2 ^ ") " ^ comp ^ " 0")
-
-	| (comp, _, _)
-		-> failwith comp	
 ;;
 
 let rec print_line = function
@@ -207,9 +210,6 @@ let print_code ast =
 
 	write_footer ()
 ;;
-
-(** Error override **)
-let parse_error s = Error.error "Parsing error" (symbol_start_pos ())
 
 (** Convert tokens to c language **)
 let dispatch_func name args = 
